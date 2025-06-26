@@ -1,28 +1,5 @@
 #include "SharedBuffer.h"
 
-#define refCount static_cast<int>(GlobalManager::getGlobalSharedBuffer().use_count() - 2)		// number of instances of this plugin
-
-void SharedBuffer::addToObjectList(AkUniqueID objectID)
-{
-	std::lock_guard<std::mutex> lock(mtx);
-	auto iterator = std::find(objectList.begin(), objectList.end(), objectID);
-	if (iterator == objectList.end())
-	{
-		objectList.push_back(objectID);
-	}
-	
-}
-
-void SharedBuffer::removeFromObjectList(AkUniqueID objectID)
-{
-	std::lock_guard<std::mutex> lock(mtx);
-	auto iterator = std::find(objectList.begin(), objectList.end(), objectID);
-	if (iterator != objectList.end())
-	{
-		objectList.erase(iterator);
-	}
-}
-
 void SharedBuffer::resetSharedBufferAndPriorityList()
 {
 	std::lock_guard<std::mutex> lock(mtx);
@@ -63,8 +40,6 @@ void SharedBuffer::addToSharedBuffer(AkAudioBuffer* sourceBuffer)
 			frame++;
 		}
 	}
-
-	// errorMsg = std::to_string(refCount);
 
 }
 
@@ -139,11 +114,49 @@ void SharedBuffer::calculatePriorityMinMax()
 
 float SharedBuffer::getRatioPercentile(AkReal32 ratio) const
 {
-
+	float value = 1.0f;
 	if (minPriority == maxPriority)
 	{
-		return 1 - static_cast<float>(1 / refCount);
+		if (objectList.size() != 0)
+		{
+			value = 1 - static_cast<float>(1 / objectList.size());
+		}
 	}
+	else
+	{
+		value = 1 - static_cast<float>((ratio - minPriority) / (maxPriority - minPriority));
+	}
+	
+	return std::clamp(value, 0.0f, 1.0f);
+}
 
-	return 1 - static_cast<float>((ratio - minPriority) / (maxPriority - minPriority));
+
+void SharedBuffer::addToObjectList(AkUniqueID objectID)
+{
+	std::lock_guard<std::mutex> lock(mtx);
+	auto it = std::find(objectList.begin(), objectList.end(), objectID);
+	if (it == objectList.end())
+	{
+		objectList.push_back(objectID);
+	}
+}
+
+void SharedBuffer::removeFromObjectList(AkUniqueID objectID)
+{
+	std::lock_guard<std::mutex> lock(mtx);
+	auto it = std::find(objectList.begin(), objectList.end(), objectID);
+	if (it != objectList.end())
+	{
+		objectList.erase(it);
+	}
+}
+
+void SharedBuffer::removeFromPriorityList(AkReal32 priority)
+{
+	std::lock_guard<std::mutex> lock(mtx);
+	auto it = std::find(priorityList.begin(), priorityList.end(), priority);
+	if (it != priorityList.end())
+	{
+		priorityList.erase(it);
+	}
 }

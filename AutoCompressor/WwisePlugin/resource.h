@@ -9,6 +9,8 @@
 #define IDC_RATIO                       1004
 #define IDC_KNEE                        1005
 #define IDC_ATTACK                      1006
+#define IDC_DATA2                       1007
+#define IDC_ATTACK2                     1008
 
 // Next default values for new objects
 // 

@@ -58,6 +58,7 @@ AKRESULT AutoCompressorFXParams::Init(AK::IAkPluginMemAlloc* in_pAllocator, cons
         RTPC.fRatio = 1.0f;
         RTPC.fKnee = 0.0f;
         RTPC.fAttack = 0.0f;
+        RTPC.fRelease = 0.0f;
         m_paramChangeHandler.SetAllParamChanges();
         return AK_Success;
     }
@@ -82,6 +83,7 @@ AKRESULT AutoCompressorFXParams::SetParamsBlock(const void* in_pParamsBlock, AkU
     RTPC.fRatio = READBANKDATA(AkReal32, pParamsBlock, in_ulBlockSize);
     RTPC.fKnee = READBANKDATA(AkReal32, pParamsBlock, in_ulBlockSize);
     RTPC.fAttack = READBANKDATA(AkReal32, pParamsBlock, in_ulBlockSize);
+    RTPC.fRelease = READBANKDATA(AkReal32, pParamsBlock, in_ulBlockSize);
     CHECKBANKDATASIZE(in_ulBlockSize, eResult);
     m_paramChangeHandler.SetAllParamChanges();
 
@@ -114,6 +116,10 @@ AKRESULT AutoCompressorFXParams::SetParam(AkPluginParamID in_paramID, const void
     case PARAM_ATTACK_ID:
         RTPC.fAttack = *((AkReal32*)in_pValue);
         m_paramChangeHandler.SetParamChange(PARAM_ATTACK_ID);
+        break;
+    case PARAM_RELEASE_ID:
+        RTPC.fRelease = *((AkReal32*)in_pValue);
+        m_paramChangeHandler.SetParamChange(PARAM_RELEASE_ID);
         break;
     default:
         eResult = AK_InvalidParameter;

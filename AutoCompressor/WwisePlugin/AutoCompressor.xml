@@ -106,6 +106,19 @@ for the documentation about the plugin xml format
           </ValueRestriction>
         </Restrictions>
       </Property>
+	  <Property Name="Release" Type="Real32" SupportRTPCType="Exclusive" DisplayName="Release">
+        <UserInterface Step="0.1" Fine="0.01" Decimals="2" UIMax="6" UIMin="0"/>
+        <DefaultValue>0.0</DefaultValue>
+        <AudioEnginePropertyID>5</AudioEnginePropertyID>
+        <Restrictions>
+          <ValueRestriction>
+            <Range Type="Real32">
+              <Min>0</Min>
+              <Max>6</Max>
+            </Range>
+          </ValueRestriction>
+        </Restrictions>
+      </Property>
     </Properties>
   </EffectPlugin>
 </PluginModule>

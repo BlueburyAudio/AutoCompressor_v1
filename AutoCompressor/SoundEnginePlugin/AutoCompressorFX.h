@@ -35,6 +35,7 @@ the specific language governing permissions and limitations under the License.
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 /// See https://www.audiokinetic.com/library/edge/?source=SDK&id=soundengine__plugins__effects.html
 /// for the documentation about effect plug-ins
@@ -77,11 +78,30 @@ private:
 
     std::shared_ptr<SharedBuffer> g_SharedBuffer = GlobalManager::getGlobalSharedBuffer();
     
-    AkReal32 myRMS[2] = { 0.0f, 0.0f };
+    AkReal32 myRMS[2] = { 0.0f, 0.0f };             // in linear
     AkUniqueID objectID;
     AkUInt32 sampleRate;
-    std::string errorMsg = "Default Error Message";
-    AkReal32 errorFloat = 0.0f;
+    AkReal32 epsilon = static_cast<AkReal32>(powf(10,-4));
+    AkReal32 priority = 1.0f;               
+    AkReal32 env_target[2] = { 0.0f, 0.0f };        // target gain (w/o envelope), but positive
+    AkReal32 env_ratio[2] = { 0.0f, 0.0f };         // ratio of dry signal affected by envelope, between 0 & 1
+    AkReal32 env_output[2] = { 0.0f, 0.0f };        // output based on env_ratio, in dB
+    AkReal32 env_outputPeak[2] = { 0.0f, 0.0f };    
+    AkReal32 scPercent[2] = { 0.0f, 0.0f };         // this plugin's percent of the sidechain signal
+    AkReal32 mixOutput[2] = { 0.0f, 0.0f };
+
+    enum envState
+    {
+        env_idle = 0,
+        env_attack,
+        env_sustain,
+        env_release
+    };
+    AkUInt16 env_state = env_idle;
+
+    // Debugging
+    std::string errorMsg;
 };
+
 
 #endif // AutoCompressorFX_H

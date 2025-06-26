@@ -69,6 +69,8 @@ void AutoCompressorPluginGUI::NotifyMonitorData(AkTimeMs in_iTimeStamp, const AK
         auto* serializedData = (std::string*)in_pMonitorDataArray->pData;
         HWND DlgLable1 = ::GetDlgItem(m_hwndPropView, IDC_DATA1);
         ::SetWindowTextA(DlgLable1, serializedData[0].c_str());
+        HWND DlgLable2 = ::GetDlgItem(m_hwndPropView, IDC_DATA2);
+        ::SetWindowTextA(DlgLable2, serializedData[1].c_str());
     }
 }
 

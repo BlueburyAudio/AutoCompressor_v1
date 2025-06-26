@@ -37,7 +37,8 @@ static const AkPluginParamID PARAM_PRIORITY_ID = 1;
 static const AkPluginParamID PARAM_RATIO_ID = 2;
 static const AkPluginParamID PARAM_KNEE_ID = 3;
 static const AkPluginParamID PARAM_ATTACK_ID = 4;
-static const AkUInt32 NUM_PARAMS = 5;
+static const AkPluginParamID PARAM_RELEASE_ID = 5;
+static const AkUInt32 NUM_PARAMS = 6;
 
 struct AutoCompressorRTPCParams
 {
@@ -46,6 +47,7 @@ struct AutoCompressorRTPCParams
     AkReal32 fRatio;
     AkReal32 fKnee;
     AkReal32 fAttack;
+    AkReal32 fRelease;
 };
 
 struct AutoCompressorNonRTPCParams
