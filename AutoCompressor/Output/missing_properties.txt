@@ -1,3 +1,0 @@
-
-Checking for missing Markdown files for WwisePlugin\AutoCompressor.xml:
-Missing markdown files for WwisePlugin\AutoCompressor.xml: 0

@@ -1,0 +1,9 @@
+
+Checking for missing Markdown files for WwisePlugin\AutoCompressor.xml:
+Threshold
+Priority
+Ratio
+Knee
+Attack
+Release
+Missing markdown files for WwisePlugin\AutoCompressor.xml: 6
